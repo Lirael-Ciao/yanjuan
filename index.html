@@ -346,86 +346,6 @@
   .music-fab.playing .icon-play { display: none; }
   .music-fab.playing .icon-pause { display: block; }
 
-  /* ================= 留言板 ================= */
-  .leave-fab {
-    position: fixed;
-    left: 20px; bottom: 24px;
-    z-index: 90;
-    height: 46px;
-    padding: 0 20px;
-    border-radius: 23px;
-    background: rgba(18, 24, 32, 0.6);
-    border: 1px solid rgba(255,255,255,0.12);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    color: rgba(255,255,255,0.6);
-    font-size: 14px;
-    letter-spacing: 3px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: color 0.3s, border-color 0.3s, background 0.3s, transform 0.3s;
-  }
-  .leave-fab:hover {
-    color: #fff;
-    border-color: rgba(255,255,255,0.35);
-    background: rgba(28, 36, 46, 0.75);
-    transform: translateY(-2px);
-  }
-
-  .leave-modal {
-    position: fixed; inset: 0; z-index: 250;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0; visibility: hidden;
-    transition: opacity 0.4s ease, visibility 0.4s;
-  }
-  .leave-modal.active { opacity: 1; visibility: visible; }
-  .leave-card {
-    width: 100%; max-width: 340px;
-    margin: 0 20px;
-    background: #0b0b0b;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 8px;
-    padding: 26px 22px 22px;
-    position: relative;
-  }
-  .leave-title { font-size: 15px; letter-spacing: 3px; color: rgba(255,255,255,0.7); text-align: center; margin-bottom: 22px; }
-  .leave-close { position: absolute; top: 8px; right: 10px; background: none; border: none; color: rgba(255,255,255,0.35); font-size: 20px; line-height: 1; cursor: pointer; padding: 4px; }
-  .leave-close:hover { color: #fff; }
-  .leave-field { margin-bottom: 14px; }
-  .leave-input, .leave-textarea {
-    width: 100%;
-    background: #111;
-    border: 1px solid #222;
-    border-radius: 4px;
-    padding: 10px 12px;
-    color: #fff;
-    font-size: 13px;
-    outline: none;
-    font-family: inherit;
-    transition: border-color 0.3s;
-  }
-  .leave-input:focus, .leave-textarea:focus { border-color: rgba(255,255,255,0.28); }
-  .leave-textarea { min-height: 96px; resize: vertical; line-height: 1.6; }
-  .leave-submit {
-    width: 100%;
-    background: rgba(255,255,255,0.9);
-    color: #000;
-    border: none;
-    border-radius: 4px;
-    padding: 11px 0;
-    font-size: 14px;
-    letter-spacing: 3px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: background 0.3s, opacity 0.3s;
-  }
-  .leave-submit:hover { background: #fff; }
-  .leave-submit:disabled { opacity: 0.5; cursor: default; }
-  .leave-hint { margin-top: 12px; font-size: 11px; letter-spacing: 1px; color: rgba(255,255,255,0.28); text-align: center; }
-
   /* ================= 全局 Toast ================= */
   .toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.95); border: 1px solid rgba(255,255,255,0.1); padding: 12px 24px; border-radius: 6px; font-size: 14px; letter-spacing: 1px; color: #fff; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; pointer-events: none; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
   .toast.show { opacity: 1; visibility: visible; }
@@ -433,7 +353,12 @@
   /* ================= 私信聊天界面 ================= */
   .chat-modal { position: fixed; inset: 0; z-index: 200; background: #080808; display: flex; flex-direction: column; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s; }
   .chat-modal.active { opacity: 1; visibility: visible; }
-  .chat-header { padding: 16px 20px; text-align: center; font-size: 16px; border-bottom: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.8); }
+  .chat-header { padding: 16px 20px; text-align: center; font-size: 16px; border-bottom: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.8); position: relative; padding-bottom: max(16px, env(safe-area-inset-top)); }
+  .chat-back { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(255,255,255,0.5); font-size: 24px; line-height: 1; cursor: pointer; padding: 6px 10px; font-family: inherit; transition: color 0.3s; }
+  .chat-back:hover { color: #fff; }
+  .chat-status { margin-top: 5px; font-size: 11px; letter-spacing: 1px; color: rgba(255,255,255,0.28); font-weight: 400; }
+  .chat-bubble.outgoing { background: rgba(255,255,255,0.88); color: #000; align-self: flex-end; border-top-right-radius: 2px; }
+  .chat-bubble.notice { align-self: center; background: transparent; color: rgba(255,255,255,0.3); font-size: 12px; letter-spacing: 1px; padding: 2px; text-align: center; }
   .chat-body { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
   .chat-bubble { max-width: 75%; padding: 12px 16px; border-radius: 8px; font-size: 14px; line-height: 1.5; }
   .chat-bubble.incoming { background: #1a1a1a; color: #e0e0e0; align-self: flex-start; border-top-left-radius: 2px; }
@@ -625,29 +550,16 @@
     <svg class="icon-pause" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="6" y="5" width="4" height="14" fill="currentColor"/><rect x="14" y="5" width="4" height="14" fill="currentColor"/></svg>
   </button>
 
-  <!-- 留言板 -->
-  <button class="leave-fab" id="leaveFab">留言</button>
-  <div class="leave-modal" id="leaveModal">
-    <div class="leave-card">
-      <button class="leave-close" id="leaveClose" aria-label="关闭">×</button>
-      <div class="leave-title">写给我</div>
-      <div class="leave-field">
-        <input class="leave-input" id="leaveName" type="text" maxlength="20" placeholder="你的称呼（可留空）">
-      </div>
-      <div class="leave-field">
-        <textarea class="leave-textarea" id="leaveText" maxlength="500" placeholder="想说的话"></textarea>
-      </div>
-      <button class="leave-submit" id="leaveSubmit">送出</button>
-      <p class="leave-hint">留言会直接送到我邮箱，不会公开显示</p>
-    </div>
-  </div>
-
   <!-- 全局 Toast -->
   <div class="toast" id="toast"></div>
 
   <!-- 私信聊天界面 -->
   <div class="chat-modal" id="chatModal">
-    <div class="chat-header">恹倦</div>
+    <div class="chat-header">
+      <button class="chat-back" id="chatBack" aria-label="返回">‹</button>
+      恹倦
+      <div class="chat-status">对方离线中</div>
+    </div>
     <div class="chat-body" id="chatBody"></div>
     <div class="chat-input-area">
       <input type="text" class="chat-input" id="chatInput" placeholder="想对我说些什么...">
@@ -797,93 +709,87 @@
   /* ---------- 私信 ---------- */
   var btnMessage = document.getElementById('btnMessage');
   var chatModal = document.getElementById('chatModal');
+  var chatBack = document.getElementById('chatBack');
   var chatBody = document.getElementById('chatBody');
   var chatInput = document.getElementById('chatInput');
   var chatSend = document.getElementById('chatSend');
+  var CHAT_ENDPOINT = 'https://formsubmit.co/ajax/19571705571@163.com';
 
-  btnMessage.onclick = function () {
+  function pushBubble(text, cls) {
+    var msg = document.createElement('div');
+    msg.className = 'chat-bubble ' + cls;
+    msg.innerText = text;
+    chatBody.appendChild(msg);
+    chatBody.scrollTop = chatBody.scrollHeight;
+    return msg;
+  }
+
+  function openChat() {
     chatModal.classList.add('active');
     chatBody.innerHTML = '';
     setTimeout(function () {
-      var msg = document.createElement('div');
-      msg.className = 'chat-bubble incoming';
-      msg.innerText = '想对我说些什么呢？';
-      chatBody.appendChild(msg);
-      chatBody.scrollTop = chatBody.scrollHeight;
+      pushBubble('想对我说些什么呢？', 'incoming');
     }, 600);
-  };
-
-  function blockChat(e) {
-    if (e) e.preventDefault();
-    chatInput.blur();
-    showToast('私信功能封锁中');
     setTimeout(function () {
-      chatModal.classList.remove('active');
-      chatInput.value = '';
-    }, 1500);
+      chatInput.focus();
+    }, 900);
   }
 
-  chatInput.addEventListener('focus', blockChat);
-  chatSend.addEventListener('click', blockChat);
+  function closeChat() {
+    chatModal.classList.remove('active');
+    chatInput.value = '';
+  }
 
-  /* ---------- 留言板 ---------- */
-  var leaveFab = document.getElementById('leaveFab');
-  var leaveModal = document.getElementById('leaveModal');
-  var leaveClose = document.getElementById('leaveClose');
-  var leaveName = document.getElementById('leaveName');
-  var leaveText = document.getElementById('leaveText');
-  var leaveSubmit = document.getElementById('leaveSubmit');
-  var LEAVE_ENDPOINT = 'https://formsubmit.co/ajax/19571705571@163.com';
+  btnMessage.onclick = openChat;
+  chatBack.onclick = closeChat;
 
-  leaveFab.addEventListener('click', function () {
-    leaveModal.classList.add('active');
-  });
-
-  leaveClose.addEventListener('click', function () {
-    leaveModal.classList.remove('active');
-  });
-
-  leaveModal.addEventListener('click', function (e) {
-    if (e.target === leaveModal) leaveModal.classList.remove('active');
-  });
-
-  leaveSubmit.addEventListener('click', function () {
-    var text = leaveText.value.trim();
+  chatSend.onclick = function () {
+    var text = chatInput.value.trim();
     if (!text) {
       showToast('还没写内容');
       return;
     }
-    leaveSubmit.disabled = true;
-    leaveSubmit.innerText = '送出中';
-    fetch(LEAVE_ENDPOINT, {
+    chatInput.value = '';
+    pushBubble(text, 'outgoing');
+    chatSend.disabled = true;
+
+    var notice = pushBubble('对方离线中，正在转达…', 'notice');
+
+    fetch(CHAT_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
       body: JSON.stringify({
-        name: leaveName.value.trim() || '匿名',
+        name: '私信访客',
         message: text,
-        _subject: '恹倦主页 · 新留言'
+        _subject: '恹倦主页 · 私信'
       })
     }).then(function (r) {
       return r.json();
     }).then(function (d) {
-      leaveSubmit.disabled = false;
-      leaveSubmit.innerText = '送出';
+      chatSend.disabled = false;
       if (d && (d.success === true || d.success === 'true')) {
-        leaveName.value = '';
-        leaveText.value = '';
-        leaveModal.classList.remove('active');
-        showToast('已送达');
+        notice.innerText = '已转达到我邮箱';
+        setTimeout(function () {
+          if (!chatModal.classList.contains('active')) return;
+          pushBubble('对方离线中，看到后会回复你。', 'incoming');
+        }, 1200);
       } else {
-        showToast('发送失败，稍后再试');
+        notice.innerText = '转达失败，请稍后再试';
       }
     }).catch(function () {
-      leaveSubmit.disabled = false;
-      leaveSubmit.innerText = '送出';
-      showToast('发送失败，稍后再试');
+      chatSend.disabled = false;
+      notice.innerText = '转达失败，请稍后再试';
     });
+  };
+
+  chatInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      chatSend.click();
+    }
   });
 </script>
 </body>
