@@ -775,7 +775,7 @@
     }).then(function (d) {
       chatSend.disabled = false;
       if (d && (d.success === true || d.success === 'true')) {
-        receipt.innerText = '已转达到我邮箱';
+        receipt.innerText = '已送达';
         setTimeout(function () {
           if (!chatModal.classList.contains('active')) return;
           pushBubble('【自动回复】我已经收到你的消息啦', 'incoming');
