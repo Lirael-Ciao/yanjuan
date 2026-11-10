@@ -358,7 +358,7 @@
   .chat-back:hover { color: #fff; }
   .chat-status { margin-top: 5px; font-size: 11px; letter-spacing: 1px; color: rgba(255,255,255,0.28); font-weight: 400; }
   .chat-bubble.outgoing { background: rgba(255,255,255,0.88); color: #000; align-self: flex-end; border-top-right-radius: 2px; }
-  .chat-bubble.notice { align-self: center; background: transparent; color: rgba(255,255,255,0.3); font-size: 12px; letter-spacing: 1px; padding: 2px; text-align: center; }
+  .chat-receipt { align-self: flex-end; margin-top: -12px; font-size: 10px; letter-spacing: 1px; color: rgba(255,255,255,0.28); text-align: right; padding-right: 2px; }
   .chat-body { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
   .chat-bubble { max-width: 75%; padding: 12px 16px; border-radius: 8px; font-size: 14px; line-height: 1.5; }
   .chat-bubble.incoming { background: #1a1a1a; color: #e0e0e0; align-self: flex-start; border-top-left-radius: 2px; }
@@ -753,7 +753,11 @@
     pushBubble(text, 'outgoing');
     chatSend.disabled = true;
 
-    var notice = pushBubble('对方离线中，正在转达…', 'notice');
+    var receipt = document.createElement('div');
+    receipt.className = 'chat-receipt';
+    receipt.innerText = '发送中…';
+    chatBody.appendChild(receipt);
+    chatBody.scrollTop = chatBody.scrollHeight;
 
     fetch(CHAT_ENDPOINT, {
       method: 'POST',
@@ -771,17 +775,17 @@
     }).then(function (d) {
       chatSend.disabled = false;
       if (d && (d.success === true || d.success === 'true')) {
-        notice.innerText = '已转达到我邮箱';
+        receipt.innerText = '已转达到我邮箱';
         setTimeout(function () {
           if (!chatModal.classList.contains('active')) return;
-          pushBubble('对方离线中，看到后会回复你。', 'incoming');
+          pushBubble('【自动回复】我已经收到你的消息啦', 'incoming');
         }, 1200);
       } else {
-        notice.innerText = '转达失败，请稍后再试';
+        receipt.innerText = '送达失败';
       }
     }).catch(function () {
       chatSend.disabled = false;
-      notice.innerText = '转达失败，请稍后再试';
+      receipt.innerText = '送达失败';
     });
   };
 
