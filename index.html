@@ -28,6 +28,8 @@
     --card-hover: rgba(255,255,255,0.07);
     --card-border: rgba(255,255,255,0.08);
     --card-border-hi: rgba(255,255,255,0.2);
+    --ripple-line: rgba(255,255,255,0.42);
+    --ripple-fill: rgba(255,255,255,0.28);
     --pill-bg: rgba(255,255,255,0.08);
     --pill-text: #d4d4d4;
     --accent-rgb: 160, 196, 230;
@@ -35,7 +37,7 @@
     --solid-text: #000000;
     --player-bg: rgba(16, 22, 30, 0.66);
     --player-shadow: 0 10px 32px rgba(0,0,0,0.55);
-    --gate-bg: radial-gradient(130% 95% at 50% 0%, #0c1218 0%, #050708 42%, #000 100%);
+    --gate-bg: radial-gradient(130% 95% at 50% 0%, rgba(12,18,24,0.78) 0%, rgba(5,7,8,0.84) 42%, rgba(0,0,0,0.9) 100%);
     --glow-color: rgba(125, 165, 205, 0.18);
     --title-glow: 0 0 34px rgba(150,190,225,0.35);
     --danger: rgba(228, 140, 140, 0.85);
@@ -43,7 +45,7 @@
     --toast-text: #ffffff;
     --lightbox-bg: rgba(0, 0, 0, 0.92);
     --chat-bg: #080808;
-    --chat-bar: #050505;
+    --book-bg: radial-gradient(130% 95% at 50% 0%, rgba(14,20,26,0.95) 0%, rgba(5,7,9,0.97) 45%, rgba(0,0,0,0.98) 100%);    --chat-bar: #050505;
     --chat-input: #111111;
     --chat-input-border: #222222;
     --bubble-in: #1a1a1a;
@@ -66,6 +68,8 @@
     --card-hover: rgba(255,255,255,0.98);
     --card-border: rgba(20,23,27,0.08);
     --card-border-hi: rgba(20,23,27,0.2);
+    --ripple-line: rgba(20,23,27,0.3);
+    --ripple-fill: rgba(20,23,27,0.18);
     --pill-bg: rgba(20,23,27,0.06);
     --pill-text: #3b4046;
     --accent-rgb: 46, 110, 150;
@@ -73,7 +77,7 @@
     --solid-text: #ffffff;
     --player-bg: rgba(255,255,255,0.8);
     --player-shadow: 0 10px 30px rgba(25, 40, 60, 0.14);
-    --gate-bg: radial-gradient(130% 95% at 50% 0%, #ffffff 0%, #f0f2f5 45%, #e3e7ec 100%);
+    --gate-bg: radial-gradient(130% 95% at 50% 0%, rgba(255,255,255,0.82) 0%, rgba(240,242,245,0.8) 45%, rgba(227,231,236,0.86) 100%);
     --glow-color: rgba(120, 160, 200, 0.24);
     --title-glow: none;
     --danger: #b34848;
@@ -81,6 +85,7 @@
     --toast-text: #14171b;
     --lightbox-bg: rgba(248, 249, 251, 0.96);
     --chat-bg: #f6f7f9;
+    --book-bg: radial-gradient(130% 95% at 50% 0%, rgba(255,255,255,0.97) 0%, rgba(240,242,246,0.97) 45%, rgba(230,234,239,0.98) 100%);
     --chat-bar: #ffffff;
     --chat-input: #ffffff;
     --chat-input-border: #dcdfe3;
@@ -155,6 +160,8 @@
     display: flex; align-items: center; justify-content: center;
     padding: 24px;
     background: var(--gate-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     transition: opacity 1s ease, visibility 1s ease;
     overflow: hidden;
   }
@@ -195,11 +202,20 @@
   }
   @keyframes ringSpin { to { transform: rotate(360deg); } }
 
+  .gate-ring { display: none; }
+
   .gate-content {
     position: relative;
     text-align: center;
     width: 100%;
-    max-width: 330px;
+    max-width: 340px;
+    padding: 38px 28px 32px;
+    border-radius: 22px;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.08);
     animation: gateIn 1.6s cubic-bezier(.22,1,.36,1) both;
   }
   @keyframes gateIn {
@@ -223,7 +239,7 @@
     text-indent: 6px;
     color: var(--text-1);
     text-shadow: var(--title-glow);
-    margin-bottom: 58px;
+    margin-bottom: 36px;
   }
 
   .gate-btns { display: flex; justify-content: center; gap: 16px; }
@@ -942,6 +958,156 @@
   @media (prefers-reduced-motion: reduce) {
     * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   }
+  /* ================= 预约问卷（全屏） ================= */
+  #panel-book { display: none; }
+  body.book-open #panel-book.active {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 42;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    background: var(--book-bg);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    animation: bookIn 0.45s ease both;
+  }
+  @keyframes bookIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  body.book-open .header,
+  body.book-open .stats,
+  body.book-open .bio,
+  body.book-open .tags,
+  body.book-open .action-area,
+  body.book-open .sub-nav { display: none !important; }
+  body.book-open .player,
+  body.book-open .theme-toggle { display: none !important; }
+
+  .book-bar {
+    display: flex; align-items: center;
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 20px 22px 6px;
+    position: relative;
+  }
+  .book-back {
+    width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 50%;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--text-2);
+    cursor: pointer;
+    transition: color .3s, border-color .3s;
+  }
+  .book-back:hover { color: var(--text-1); border-color: var(--card-border-hi); }
+  .book-bar-title {
+    position: absolute; left: 0; right: 0; text-align: center;
+    font-size: 12px; letter-spacing: 3px; text-indent: 3px;
+    color: var(--text-3); pointer-events: none;
+  }
+
+  .book-inner {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 14px 22px 100px;
+  }
+  .book-wrap { padding: 0; }
+  .book-head {
+    font-size: 11px; letter-spacing: 3px;
+    color: var(--text-3);
+    margin-bottom: 18px;
+  }
+  .book-note {
+    font-size: 11px; letter-spacing: 1px; color: var(--text-4);
+    margin: -12px 0 22px;
+  }
+  .book-field { margin-bottom: 14px; }
+  .book-field label {
+    display: block; font-size: 11px; letter-spacing: 2px;
+    color: var(--text-3); margin-bottom: 7px;
+  }
+  .book-field input,
+  .book-field textarea {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    padding: 11px 13px;
+    color: var(--text-1);
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.5;
+    outline: none;
+    transition: border-color .3s, background .3s;
+  }
+  .book-field textarea { resize: vertical; min-height: 84px; }
+  .book-field input::placeholder,
+  .book-field textarea::placeholder { color: var(--text-4); }
+  .book-field input:focus,
+  .book-field textarea:focus { border-color: var(--card-border-hi); background: var(--card-hover); }
+  .book-field input[type="date"] { color-scheme: dark; }
+  html[data-theme="light"] .book-field input[type="date"] { color-scheme: light; }
+
+  .book-types { display: flex; gap: 10px; flex-wrap: wrap; }
+  .book-types button {
+    flex: 1; min-width: 84px;
+    padding: 11px 0;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 999px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--text-2);
+    font-family: inherit; font-size: 13px; letter-spacing: 2px;
+    cursor: pointer;
+    transition: background .3s, border-color .3s, color .3s;
+  }
+  .book-types button:hover { border-color: var(--card-border-hi); color: var(--text-1); }
+  .book-types button.on {
+    background: var(--solid-bg); color: var(--solid-text);
+    border-color: transparent;
+  }
+
+  .book-submit {
+    width: 100%; margin-top: 8px;
+    padding: 14px 0;
+    background: var(--solid-bg); color: var(--solid-text);
+    border: none; border-radius: 999px;
+    font-family: inherit; font-size: 14px; letter-spacing: 4px; text-indent: 4px;
+    cursor: pointer; transition: opacity .3s, transform .3s;
+  }
+  .book-submit:hover { opacity: 0.88; transform: translateY(-1px); }
+  .book-submit:disabled { opacity: 0.5; cursor: default; transform: none; }
+
+  /* ================= 点击涟漪 ================= */
+  .ripple {
+    position: fixed;
+    left: 0; top: 0;
+    width: 22px; height: 22px;
+    margin: -11px 0 0 -11px;
+    border-radius: 50%;
+    border: none;
+    background: var(--ripple-fill);
+    filter: blur(0.5px);
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0;
+    animation: rippleOut 800ms cubic-bezier(.25,.46,.45,.94) forwards;
+  }
+  @keyframes rippleOut {
+    0%   { transform: scale(.35); opacity: .65; }
+    100% { transform: scale(4.4); opacity: 0; }
+  }
 </style>
 </head>
 <body>
@@ -1013,10 +1179,11 @@
 
     <!-- ============ 子导航栏 ============ -->
     <nav class="sub-nav" id="subNav">
-      <button class="on" data-tab="price">价格</button>
+      <button class="on" data-tab="moment">动态</button>
+      <button data-tab="book">预约</button>
+      <button data-tab="price">价格</button>
       <button data-tab="rules">须知</button>
       <button data-tab="card">卡类</button>
-      <button data-tab="moment">动态</button>
     </nav>
 
     <!-- ============ 价格面板 ============ -->
@@ -1185,8 +1352,61 @@
 
   </main>
 
-  <!-- 全屏看图 Lightbox -->
-  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <!-- ============ 预约问卷面板 ============ -->
+    <section class="panel" id="panel-book">
+      <div class="book-bar">
+        <button class="book-back" id="bookBack" aria-label="返回">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <span class="book-bar-title">预约</span>
+      </div>
+      <div class="book-inner">
+      <div class="book-wrap">
+        <p class="book-head">约单问卷</p>
+        <p class="book-note">全部选填，提交后直接送到我邮箱</p>
+
+        <form id="bookForm" novalidate>
+          <div class="book-field">
+            <label for="bookBoss">老板称呼</label>
+            <input id="bookBoss" name="boss" type="text">
+          </div>
+
+          <div class="book-field">
+            <label for="bookLike">喜点</label>
+            <input id="bookLike" name="like" type="text">
+          </div>
+
+          <div class="book-field">
+            <label for="bookHate">雷点</label>
+            <input id="bookHate" name="hate" type="text">
+          </div>
+
+          <div class="book-field">
+            <label>板型</label>
+            <div class="book-types" id="bookTypes">
+              <button type="button" data-type="抽象板">抽象板</button>
+              <button type="button" data-type="新手板">新手板</button>
+              <button type="button" data-type="同行">同行</button>
+            </div>
+          </div>
+
+          <div class="book-field">
+            <label for="bookRemark">备注</label>
+            <textarea id="bookRemark" name="remark"></textarea>
+          </div>
+
+          <div class="book-field">
+            <label for="bookDate">日期</label>
+            <input id="bookDate" name="date" type="date">
+          </div>
+
+          <button class="book-submit" type="submit" id="bookSubmit">提交预约</button>
+        </form>
+      </div>
+      </div>
+    </section>
+
+  <!-- 全屏看图 Lightbox -->  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
     <img id="lightboxImg" src="" alt="查看大图">
   </div>
 
@@ -1333,17 +1553,30 @@
     document.querySelectorAll('.panel').forEach(function (p) {
       p.classList.remove('active');
     });
+    if (name !== 'book') lastTab = name;
+    document.body.classList.toggle('book-open', name === 'book');
     var target = document.getElementById('panel-' + name);
     if (target) {
       void target.offsetWidth;
       target.classList.add('active');
     }
+    if (name === 'book') {
+      var panel = document.getElementById('panel-book');
+      if (panel) panel.scrollTop = 0;
+      window.scrollTo(0, 0);
+    }
   }
+
+  var lastTab = 'moment';
 
   subNavBtns.forEach(function (btn) {
     btn.addEventListener('click', function () {
       switchTab(btn.dataset.tab);
     });
+  });
+
+  document.getElementById('bookBack').addEventListener('click', function () {
+    switchTab(lastTab || 'moment');
   });
 
   /* ---------- 追踪 ---------- */
@@ -1353,7 +1586,7 @@
     document.getElementById('actionFollowed').classList.add('active');
 
     subNav.classList.add('active');
-    switchTab('price');
+    switchTab('moment');
   };
 
   document.getElementById('btnTracking').onclick = function () {
@@ -1472,6 +1705,101 @@
       chatSend.click();
     }
   });
+
+  /* ---------- 预约问卷 ---------- */
+  var BOOK_ENDPOINT = 'https://formsubmit.co/ajax/19571705571@163.com';
+  var bookForm = document.getElementById('bookForm');
+  var bookSubmit = document.getElementById('bookSubmit');
+
+  document.querySelectorAll('#bookTypes button').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (btn.classList.contains('on')) {
+        btn.classList.remove('on');
+      } else {
+        document.querySelectorAll('#bookTypes button').forEach(function (b) {
+          b.classList.remove('on');
+        });
+        btn.classList.add('on');
+      }
+    });
+  });
+
+  bookForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var boss = document.getElementById('bookBoss').value.trim();
+    var like = document.getElementById('bookLike').value.trim();
+    var hate = document.getElementById('bookHate').value.trim();
+    var remark = document.getElementById('bookRemark').value.trim();
+    var date = document.getElementById('bookDate').value.trim();
+    var typeBtn = document.querySelector('#bookTypes button.on');
+    var type = typeBtn ? typeBtn.dataset.type : '';
+
+    var lines = [
+      '板型：' + (type || '—'),
+      '老板称呼：' + (boss || '—'),
+      '喜点：' + (like || '—'),
+      '雷点：' + (hate || '—'),
+      '备注：' + (remark || '—'),
+      '日期：' + (date || '—')
+    ];
+
+    bookSubmit.disabled = true;
+    bookSubmit.innerText = '提交中…';
+
+    fetch(BOOK_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        name: boss || '匿名板板',
+        message: lines.join('\n'),
+        _subject: '恹倦 · 约单预约'
+      })
+    }).then(function (r) {
+      return r.json();
+    }).then(function (d) {
+      bookSubmit.disabled = false;
+      bookSubmit.innerText = '提交预约';
+      if (d && (d.success === true || d.success === 'true')) {
+        bookForm.reset();
+        document.querySelectorAll('#bookTypes button').forEach(function (b) {
+          b.classList.remove('on');
+        });
+        showToast('已送达');
+      } else {
+        showToast('送达失败');
+      }
+    }).catch(function () {
+      bookSubmit.disabled = false;
+      bookSubmit.innerText = '提交预约';
+      showToast('送达失败');
+    });
+  });
+
+  /* ---------- 点击涟漪 ---------- */
+  (function () {
+    var SKIP = ['INPUT', 'TEXTAREA', 'SELECT'];
+    function spawn(x, y, delay) {
+      var el = document.createElement('span');
+      el.className = 'ripple';
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+
+      el.style.animationDelay = delay + 'ms';
+      document.body.appendChild(el);
+      setTimeout(function () {
+        if (el.parentNode) el.parentNode.removeChild(el);
+      }, 1400 + delay);
+    }
+    document.addEventListener('pointerdown', function (e) {
+      if (e.button !== 0) return;
+      var t = e.target;
+      if (t && SKIP.indexOf(t.tagName) > -1) return;
+      spawn(e.clientX, e.clientY, 0);
+    }, true);
+  })();
 </script>
 </body>
 </html>
