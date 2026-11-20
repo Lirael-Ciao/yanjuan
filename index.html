@@ -1014,7 +1014,7 @@
   .book-inner {
     max-width: 560px;
     margin: 0 auto;
-    padding: 14px 22px 100px;
+    padding: 26px 22px 100px;
   }
   .book-wrap { padding: 0; }
   .book-head {
@@ -1027,7 +1027,8 @@
     margin: -12px 0 22px;
   }
   .book-field { margin-bottom: 14px; }
-  .book-field label {
+  .book-field label,
+  .book-label {
     display: block; font-size: 11px; letter-spacing: 2px;
     color: var(--text-3); margin-bottom: 7px;
   }
@@ -1088,6 +1089,23 @@
   }
   .book-submit:hover { opacity: 0.88; transform: translateY(-1px); }
   .book-submit:disabled { opacity: 0.5; cursor: default; transform: none; }
+
+  .book-to-chat {
+    display: block;
+    width: 100%;
+    margin: 2px 0 16px;
+    padding: 0;
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: var(--text-3);
+    text-align: center;
+    cursor: pointer;
+    transition: color .3s;
+  }
+  .book-to-chat:hover { color: var(--text-1); }
 
   /* ================= 点击涟漪 ================= */
   .moment-book { cursor: pointer; }
@@ -1334,8 +1352,8 @@
                 </svg>
               </span>
               <span class="link-main">
-                <span class="link-title">预约问卷</span>
-                <span class="link-desc">板型 · 喜点 · 雷点 · 日期</span>
+                <span class="link-title">了解你</span>
+                <span class="link-desc">类型 · 喜点 · 雷点 · 日期</span>
               </span>
               <span class="link-arrow">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -1383,12 +1401,10 @@
         <button class="book-back" id="bookBack" aria-label="返回">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
         </button>
-        <span class="book-bar-title">预约</span>
+        <span class="book-bar-title">了解你</span>
       </div>
       <div class="book-inner">
       <div class="book-wrap">
-        <p class="book-head">约单问卷</p>
-        <p class="book-note">全部选填，提交后直接送到我邮箱</p>
 
         <form id="bookForm" novalidate>
           <div class="book-field">
@@ -1407,7 +1423,7 @@
           </div>
 
           <div class="book-field">
-            <label>板型</label>
+            <div class="book-label">是否为以下类型</div>
             <div class="book-types" id="bookTypes">
               <button type="button" data-type="抽象板">抽象板</button>
               <button type="button" data-type="新手板">新手板</button>
@@ -1424,6 +1440,8 @@
             <label for="bookDate">日期</label>
             <input id="bookDate" name="date" type="date">
           </div>
+
+          <button type="button" class="book-to-chat" id="bookToChat">有板卡？可以直接发给我 ›</button>
 
           <button class="book-submit" type="submit" id="bookSubmit">提交预约</button>
         </form>
@@ -1632,6 +1650,14 @@
     });
   }
 
+  var bookToChat = document.getElementById('bookToChat');
+  if (bookToChat) {
+    bookToChat.addEventListener('click', function () {
+      closeBook();
+      openChat();
+    });
+  }
+
   /* ---------- 追踪 ---------- */
   document.getElementById('btnSubscribe').onclick = function () {
     document.getElementById('fans-count').innerText = '1';
@@ -1788,7 +1814,7 @@
     var type = typeBtn ? typeBtn.dataset.type : '';
 
     var lines = [
-      '板型：' + (type || '—'),
+      '类型：' + (type || '—'),
       '老板称呼：' + (boss || '—'),
       '喜点：' + (like || '—'),
       '雷点：' + (hate || '—'),
@@ -1808,7 +1834,7 @@
       body: JSON.stringify({
         name: boss || '匿名板板',
         message: lines.join('\n'),
-        _subject: '恹倦 · 约单预约'
+        _subject: '恹倦 · 了解你'
       })
     }).then(function (r) {
       return r.json();
