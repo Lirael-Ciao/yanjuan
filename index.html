@@ -1090,6 +1090,7 @@
   .book-submit:disabled { opacity: 0.5; cursor: default; transform: none; }
 
   /* ================= 点击涟漪 ================= */
+  .moment-book { cursor: pointer; }
   .ripple {
     position: fixed;
     left: 0; top: 0;
@@ -1180,7 +1181,6 @@
     <!-- ============ 子导航栏 ============ -->
     <nav class="sub-nav" id="subNav">
       <button class="on" data-tab="moment">动态</button>
-      <button data-tab="book">预约</button>
       <button data-tab="price">价格</button>
       <button data-tab="rules">须知</button>
       <button data-tab="card">卡类</button>
@@ -1318,6 +1318,31 @@
                 </svg>
               </span>
             </a>
+          </div>
+        </article>
+
+        <article class="moment">
+          <img class="moment-avatar" src="avatar.jpg" alt="">
+          <div class="moment-body">
+            <div class="moment-name">恹倦</div>
+            <p class="moment-text">请让我多了解你一些。</p>
+            <div class="moment-link moment-book" id="momentBookCard" role="button" tabindex="0">
+              <span class="link-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 20h4l9-9a2.8 2.8 0 0 0-4-4l-9 9z"/>
+                  <path d="M13.5 6.5l4 4"/>
+                </svg>
+              </span>
+              <span class="link-main">
+                <span class="link-title">预约问卷</span>
+                <span class="link-desc">板型 · 喜点 · 雷点 · 日期</span>
+              </span>
+              <span class="link-arrow">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M9 6l6 6-6 6"/>
+                </svg>
+              </span>
+            </div>
           </div>
         </article>
 
@@ -1546,28 +1571,47 @@
   var subNav = document.getElementById('subNav');
   var subNavBtns = subNav.querySelectorAll('button');
 
+  var currentTab = 'moment';
+
   function switchTab(name) {
+    if (name === 'book') { openBook(); return; }
+    currentTab = name;
     subNavBtns.forEach(function (b) {
       b.classList.toggle('on', b.dataset.tab === name);
     });
     document.querySelectorAll('.panel').forEach(function (p) {
       p.classList.remove('active');
     });
-    if (name !== 'book') lastTab = name;
-    document.body.classList.toggle('book-open', name === 'book');
+    document.body.classList.remove('book-open');
     var target = document.getElementById('panel-' + name);
     if (target) {
       void target.offsetWidth;
       target.classList.add('active');
     }
-    if (name === 'book') {
-      var panel = document.getElementById('panel-book');
-      if (panel) panel.scrollTop = 0;
-      window.scrollTo(0, 0);
-    }
   }
 
-  var lastTab = 'moment';
+  function openBook() {
+    var panel = document.getElementById('panel-book');
+    document.querySelectorAll('.panel').forEach(function (p) {
+      p.classList.remove('active');
+    });
+    document.body.classList.add('book-open');
+    void panel.offsetWidth;
+    panel.classList.add('active');
+    panel.scrollTop = 0;
+    window.scrollTo(0, 0);
+  }
+
+  function closeBook() {
+    var panel = document.getElementById('panel-book');
+    panel.classList.remove('active');
+    document.body.classList.remove('book-open');
+    var back = document.getElementById('panel-' + currentTab);
+    if (back) {
+      void back.offsetWidth;
+      back.classList.add('active');
+    }
+  }
 
   subNavBtns.forEach(function (btn) {
     btn.addEventListener('click', function () {
@@ -1575,9 +1619,18 @@
     });
   });
 
-  document.getElementById('bookBack').addEventListener('click', function () {
-    switchTab(lastTab || 'moment');
-  });
+  document.getElementById('bookBack').addEventListener('click', closeBook);
+
+  var btnBookCard = document.getElementById('momentBookCard');
+  if (btnBookCard) {
+    btnBookCard.addEventListener('click', openBook);
+    btnBookCard.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openBook();
+      }
+    });
+  }
 
   /* ---------- 追踪 ---------- */
   document.getElementById('btnSubscribe').onclick = function () {
